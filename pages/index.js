@@ -1,48 +1,93 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
-  const [repoUrl, setRepoUrl] = useState('');
-  const [treeData, setTreeData] = useState(null);
-  const [error, setError] = useState(null);
+  const [time, setTime] = useState(new Date());
 
-  const handleGetTree = async () => {
-    setError(null);
-    setTreeData(null);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
 
-    try {
-      const response = await fetch(`/api/getgittree?repoUrl=${repoUrl}`);
+    return () => clearInterval(interval);
+  }, []);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to fetch tree data');
-      }
+  const hour = time.getHours();
+  const minute = time.getMinutes();
+  const second = time.getSeconds();
 
-      const data = await response.json();
-      setTreeData(data);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+  const hourDegrees = ((hour / 12) * 360) + ((minute / 60) * 30) + 90;
+  const minuteDegrees = ((minute / 60) * 360) + ((second / 60) * 6) + 90;
+  const secondDegrees = ((second / 60) * 360) + 90;
 
   return (
-    <div>
-      <h1>GitHub Repository Tree Viewer</h1>
-      <input
-        type="text"
-        placeholder="Enter GitHub Repository URL"
-        value={repoUrl}
-        onChange={(e) => setRepoUrl(e.target.value)}
-      />
-      <button onClick={handleGetTree}>Get Tree</button>
+    <div className="container">
+      <div className="clock">
+        <div className="center"></div>
+        <div className="hand hour-hand" style={{ transform: `rotate(${hourDegrees}deg)` }}></div>
+        <div className="hand minute-hand" style={{ transform: `rotate(${minuteDegrees}deg)` }}></div>
+        <div className="hand second-hand" style={{ transform: `rotate(${secondDegrees}deg)` }}></div>
+      </div>
+      <style jsx>{`
+        .container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          background-color: #f0f0f0;
+        }
 
-      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+        .clock {
+          width: 300px;
+          height: 300px;
+          background-color: white;
+          border-radius: 50%;
+          border: 5px solid #333;
+          position: relative;
+        }
 
-      {treeData && (
-        <div>
-          <h2>Repository Tree:</h2>
-          <pre>{JSON.stringify(treeData, null, 2)}</pre>
-        </div>
-      )}
+        .center {
+          width: 15px;
+          height: 15px;
+          background-color: black;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          border-radius: 50%;
+          z-index: 3;
+        }
+
+        .hand {
+          position: absolute;
+          transform-origin: 50% 50%;
+          border-radius: 5px;
+          z-index: 2;
+        }
+
+        .hour-hand {
+          width: 6px;
+          height: 80px;
+          background-color: black;
+          top: 70px;
+          left: calc(50% - 3px);
+        }
+
+        .minute-hand {
+          width: 4px;
+          height: 120px;
+          background-color: black;
+          top: 30px;
+          left: calc(50% - 2px);
+        }
+
+        .second-hand {
+          width: 2px;
+          height: 140px;
+          background-color: red;
+          top: 10px;
+          left: calc(50% - 1px);
+        }
+      `}</style>
     </div>
   );
 }

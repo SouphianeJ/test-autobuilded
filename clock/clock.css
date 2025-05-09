@@ -1,0 +1,32 @@
+/* clock/clock.css */
+.clock {
+  /* Add any overall clock styling here */
+}
+
+.clock-face {
+  fill: white;
+  stroke: black;
+  stroke-width: 2;
+}
+
+.hour-hand {
+  stroke: black;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.minute-hand {
+  stroke: black;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.second-hand {
+  stroke: red;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.center-dot {
+  fill: black;
+}

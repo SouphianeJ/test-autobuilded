@@ -1,5 +1,6 @@
 // Clock.jsx
 import React, { useState, useEffect } from 'react';
+import './clock/clock.css';
 
 const Clock = () => {
   const [time, setTime] = useState(new Date());
@@ -21,46 +22,40 @@ const Clock = () => {
   const secondDegrees = second * 6;
 
   return (
-    <svg width="200" height="200" viewBox="0 0 200 200">
-      <circle cx="100" cy="100" r="90" fill="white" stroke="black" strokeWidth="2" />
+    <svg className="clock" width="200" height="200" viewBox="0 0 200 200">
+      <circle className="clock-face" cx="100" cy="100" r="90" />
 
       {/* Hour Hand */}
       <line
+        className="hour-hand"
         x1="100"
         y1="100"
         x2="100"
         y2="40"
-        stroke="black"
-        strokeWidth="4"
-        strokeLinecap="round"
         transform={`rotate(${hourDegrees} 100 100)`}
       />
 
       {/* Minute Hand */}
       <line
+        className="minute-hand"
         x1="100"
         y1="100"
         x2="100"
         y2="30"
-        stroke="black"
-        strokeWidth="3"
-        strokeLinecap="round"
         transform={`rotate(${minuteDegrees} 100 100)`}
       />
 
       {/* Second Hand */}
       <line
+        className="second-hand"
         x1="100"
         y1="100"
         x2="100"
         y2="20"
-        stroke="red"
-        strokeWidth="2"
-        strokeLinecap="round"
         transform={`rotate(${secondDegrees} 100 100)`}
       />
 
-      <circle cx="100" cy="100" r="3" fill="black" />
+      <circle className="center-dot" cx="100" cy="100" r="3" />
     </svg>
   );
 };
